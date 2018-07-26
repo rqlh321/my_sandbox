@@ -1,0 +1,55 @@
+
+pack.png
+size: 1024,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Arrows-Left-icon
+  rotate: false
+  xy: 569, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Arrows-Right-icon
+  rotate: false
+  xy: 635, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+BadBoy
+  rotate: false
+  xy: 701, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Icon.233
+  rotate: false
+  xy: 767, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Protagonist
+  rotate: false
+  xy: 833, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+apply
+  rotate: false
+  xy: 503, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+line
+  rotate: false
+  xy: 2, 2
+  size: 499, 117
+  orig: 499, 117
+  offset: 0, 0
+  index: -1
