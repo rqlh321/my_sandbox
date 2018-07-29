@@ -14,7 +14,7 @@ import java.util.*
 
 class TiledMapParser{
 
-    val map = (MySandbox.assetManager.get("maps/test/0.tmx") as TiledMap)
+    val map = (MySandbox.assetManager.get("maps/test/1.tmx") as TiledMap)
 
     private val navLayer = map.layers.get(LAYER_NAVIGATION) as NavigationTiledMapLayer
     private val dataLayer = map.layers.get(LAYER_DATA) as TiledMapTileLayer

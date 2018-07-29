@@ -35,68 +35,58 @@ abstract class GameUnit(
     private lateinit var nextCell: GridCell
 
     var pathToTarget: MutableList<GridCell> = ArrayList()
-    var targetCell: GridCell = currentCell
+    var targetCell: GridCell? = null
 
 
     private fun newDirection() {
-        pathToTarget.clear()
+        targetCell?.let {
+            pathToTarget.clear()
 
-        val oldState = targetCell.isWalkable
-        targetCell.isWalkable = true
+            val path = try {
+                PATH_FINDER.findPath(currentCell.x, currentCell.y, it.x, it.y, navLayer)
+                        ?: emptyList()
+            } catch (e: PathFindingException) {
+                /**catch PathFindingException when click out of map*/
+                emptyList<GridCell>()
+            }
 
-        val path = try {
-            PATH_FINDER.findPath(currentCell.x, currentCell.y, targetCell.x, targetCell.y, navLayer)
-                    ?: emptyList()
-        } catch (e: PathFindingException) {
-            /**catch PathFindingException when click out of map*/
-            emptyList<GridCell>()
+
+            pathToTarget.addAll(path)
+
+            if (pathToTarget.size > 0) {
+                nextCell = pathToTarget[0]
+
+                val deltaX = (nextCell.x - currentCell.x).toFloat()
+                val deltaY = (nextCell.y - currentCell.y).toFloat()
+                val scale = (SPEED / 10).toFloat()
+
+                delta.set(deltaX, deltaY)
+                delta.scl(scale)
+                delta.mul(ISO_TRANSFORMER)
+
+                val x = (nextCell.x * tilePixelWidth / 2).toFloat()
+                val y = (nextCell.y * tilePixelHeight + tilePixelHeight).toFloat()
+
+                nextPosition.set(x, y)
+                nextPosition.mul(ISO_TRANSFORMER)
+            }
         }
 
-        targetCell.isWalkable = oldState
-
-        pathToTarget.addAll(path)
-
-        if (pathToTarget.size > 0) {
-            currentCell.isWalkable = true
-
-            nextCell = pathToTarget[0]
-            nextCell.isWalkable = false
-
-            val deltaX = (nextCell.x - currentCell.x).toFloat()
-            val deltaY = (nextCell.y - currentCell.y).toFloat()
-            val scale = (SPEED / 10).toFloat()
-
-            delta.set(deltaX, deltaY)
-            delta.scl(scale)
-            delta.mul(ISO_TRANSFORMER)
-
-            val x = (nextCell.x * tilePixelWidth / 2).toFloat()
-            val y = (nextCell.y * tilePixelHeight + tilePixelHeight).toFloat()
-
-            nextPosition.set(x, y)
-            nextPosition.mul(ISO_TRANSFORMER)
-        }
 
 
     }
 
     fun update() {
-        if (pathToTarget.size > 0) {
-            currentPosition.add(delta)
-            if (Util.onPosition(currentPosition, nextPosition)) {
-                currentCell = nextCell
-
-                currentPosition.apply {
-                    val x = (currentCell.x * tilePixelWidth / 2).toFloat()
-                    val y = (currentCell.y * tilePixelHeight + tilePixelHeight).toFloat()
-                    set(x, y)
-                    mul(ISO_TRANSFORMER)
+        targetCell?.let {
+            if (pathToTarget.size > 0) {
+                currentPosition.add(delta)
+                if (Util.onPosition(currentPosition, nextPosition)) {
+                    currentCell = nextCell
+                    newDirection()
                 }
-
+            } else if (currentCell.x != it.x || currentCell.y != it.y) {
                 newDirection()
             }
-        } else if (currentCell!=targetCell) {
-            newDirection()
         }
     }
 

@@ -44,6 +44,10 @@ class UnitDrawer(val unit: GameUnit, spriteBatch: SpriteBatch): Comparable<UnitD
         if (unit.currentCell.y < other.unit.currentCell.y) {
             return 1
         }
+        if (unit.currentCell.y == other.unit.currentCell.y && unit.currentCell.x== other.unit.currentCell.x){
+            return 0
+        }
         return if (unit.currentCell.y == other.unit.currentCell.y && unit.currentCell.x > other.unit.currentCell.x) 1 else -1
+
     }
 }

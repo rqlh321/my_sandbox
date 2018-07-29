@@ -52,7 +52,7 @@ class MySandbox : ApplicationListener {
             setLoader(TiledMap::class.java, NavTmxMapLoader(InternalFileHandleResolver()))
         }
 
-        private val viewport = FitViewport(800.toFloat(), 600.toFloat(), OrthographicCamera())
+        private val viewport = FitViewport(1024.toFloat(), 600.toFloat(), OrthographicCamera())
 
         private val screens = mapOf<String, Screen>(
                 LoadingScreen::class.java.simpleName to LoadingScreen(viewport)

@@ -6,10 +6,11 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.mygdx.game.Util
+import com.mygdx.game.act.ActionManager
 import com.mygdx.game.main.stage.MainLayer
 import org.xguzm.pathfinding.grid.GridCell
 
-class Control(viewport: Viewport,private val layer: MainLayer): GestureDetector.GestureAdapter() {
+class Control(viewport: Viewport, private val layer: MainLayer): GestureDetector.GestureAdapter() {
 
     private val camera = viewport.camera as OrthographicCamera
 
@@ -28,7 +29,7 @@ class Control(viewport: Viewport,private val layer: MainLayer): GestureDetector.
         Util.worldToIso(vector2, layer.mapParser.tilePixelWidth, layer.mapParser.tilePixelHeight)
         val xCel = vector2.x.toInt()
         val yCel = vector2.y.toInt()
-        layer.tap(GridCell(xCel, yCel))
+        layer.actionManager.targetCell=GridCell(xCel, yCel)
         return super.tap(x, y, count, button)
     }
 }

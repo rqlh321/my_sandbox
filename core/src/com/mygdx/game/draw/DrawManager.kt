@@ -45,8 +45,6 @@ class DrawManager(
 
 
     fun draw(delta: Float) {
-
-        units.forEach { it.update() }
         tiledMapRenderer.setView(camera)
         tiledMapRenderer.batch.projectionMatrix = camera.combined
         batch.begin()
@@ -63,8 +61,8 @@ class DrawManager(
                 val type = if (it.unit is Enemy) enemyCell else friendCell
                 it.unit.currentCell.let { highLightLayer.setCell(it.x, it.y, type) }
                 it.unit.pathToTarget.forEach { highLightLayer.setCell(it.x, it.y, pathCell) }
-                it.unit.targetCell.let { highLightLayer.setCell(it.x, it.y, targetCell) }
-                it.draw()
+                it.unit.targetCell?.let { highLightLayer.setCell(it.x, it.y, targetCell) }
+//                it.draw()
             }
         }
 
