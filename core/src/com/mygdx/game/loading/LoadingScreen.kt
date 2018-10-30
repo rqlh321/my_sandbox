@@ -8,7 +8,7 @@ import com.mygdx.game.base.BaseScreen
 class LoadingScreen(viewport: Viewport) : BaseScreen(viewport){
 
     override fun show() {
-        MySandbox.assetManager.load<TiledMap>("maps/test/1.tmx", TiledMap::class.java)
+        MySandbox.assetManager.load<TiledMap>(MySandbox.TEST_LEVEL, TiledMap::class.java)
 
         while (true) {
             if(MySandbox.assetManager.update()){

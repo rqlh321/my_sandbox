@@ -15,9 +15,7 @@ class MainLayer(viewport: Viewport) : BaseLayer(viewport) {
 
     val actionManager = ActionManager(mapParser.units)
 
-    override fun act(delta: Float) {
-        actionManager.act(delta)
-    }
+    override fun act(delta: Float) = actionManager.act(delta)
 
     override fun draw(delta: Float) = drawManager.draw(delta)
 

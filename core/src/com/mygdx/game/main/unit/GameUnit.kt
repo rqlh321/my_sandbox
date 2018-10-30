@@ -15,15 +15,7 @@ abstract class GameUnit(
         , private val navLayer: NavigationTiledMapLayer
         , private val tilePixelWidth: Int
         , private val tilePixelHeight: Int
-) : GameObject {
-
-    abstract var DAMAGE: Int
-    abstract var HEALTH: Int
-    abstract var MAX_HEALTH: Int
-    abstract var SPEED: Int
-
-    private val nextPosition = Vector2()
-    private val delta = Vector2()
+) {
 
     var currentPosition = Vector2().apply {
         val x = (currentCell.x * tilePixelWidth / 2).toFloat()
@@ -32,60 +24,62 @@ abstract class GameUnit(
         mul(ISO_TRANSFORMER)
     }
 
-    private lateinit var nextCell: GridCell
 
     var pathToTarget: MutableList<GridCell> = ArrayList()
     var targetCell: GridCell? = null
-
+    var nextCell: GridCell? = null
 
     private fun newDirection() {
-        targetCell?.let {
-            pathToTarget.clear()
+        println("newDirection")
 
-            val path = try {
-                PATH_FINDER.findPath(currentCell.x, currentCell.y, it.x, it.y, navLayer)
-                        ?: emptyList()
-            } catch (e: PathFindingException) {
-                /**catch PathFindingException when click out of map*/
-                emptyList<GridCell>()
-            }
+        pathToTarget.clear()
 
-
-            pathToTarget.addAll(path)
-
-            if (pathToTarget.size > 0) {
-                nextCell = pathToTarget[0]
-
-                val deltaX = (nextCell.x - currentCell.x).toFloat()
-                val deltaY = (nextCell.y - currentCell.y).toFloat()
-                val scale = (SPEED / 10).toFloat()
-
-                delta.set(deltaX, deltaY)
-                delta.scl(scale)
-                delta.mul(ISO_TRANSFORMER)
-
-                val x = (nextCell.x * tilePixelWidth / 2).toFloat()
-                val y = (nextCell.y * tilePixelHeight + tilePixelHeight).toFloat()
-
-                nextPosition.set(x, y)
-                nextPosition.mul(ISO_TRANSFORMER)
-            }
+        val path = try {
+            PATH_FINDER.findPath(currentCell.x, currentCell.y, targetCell!!.x, targetCell!!.y, navLayer)
+                    ?: emptyList()
+        } catch (e: PathFindingException) {
+            emptyList<GridCell>()
         }
 
 
+        if (path.isNotEmpty()) {
+            targetCell = null
+            pathToTarget.addAll(path)
+            nextCell = pathToTarget[0]
+            pathToTarget.removeAt(0)
+        }
 
     }
 
     fun update() {
-        targetCell?.let {
-            if (pathToTarget.size > 0) {
-                currentPosition.add(delta)
-                if (Util.onPosition(currentPosition, nextPosition)) {
-                    currentCell = nextCell
+        if (targetCell != null && targetCell?.isWalkable == false) {
+            targetCell = null
+            nextCell   = null
+            pathToTarget.clear()
+        }
+
+        if (pathToTarget.size > 0) {
+            if (nextCell?.isWalkable == true) {
+                currentCell.isWalkable = true
+                currentCell = nextCell!!
+                currentCell.isWalkable = false
+                pathToTarget.removeAt(0)
+                if (pathToTarget.isNotEmpty()) {
+                    nextCell = pathToTarget[0]
+                }
+
+                currentPosition.apply {
+                    val x = (currentCell.x * tilePixelWidth / 2).toFloat()
+                    val y = (currentCell.y * tilePixelHeight + tilePixelHeight).toFloat()
+                    set(x, y)
+                    mul(ISO_TRANSFORMER)
+                }
+            }
+        } else {
+            targetCell?.let {
+                if (currentCell.x != it.x || currentCell.y != it.y) {
                     newDirection()
                 }
-            } else if (currentCell.x != it.x || currentCell.y != it.y) {
-                newDirection()
             }
         }
     }

@@ -13,12 +13,6 @@ class BadBoy(
         , tilePixelHeight: Int
 ) : Enemy(cell, gameUnits, navLayer, tilePixelWidth, tilePixelHeight) {
 
-    override var DAMAGE = 20
-    override var MAX_HEALTH = 100
-    override var HEALTH = MAX_HEALTH
-    override var SPEED = 20 + (Math.random() * 10).toInt()
-
     override fun act() = Unit
 
-    override fun name(): String = BadBoy::class.java.simpleName
 }

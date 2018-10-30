@@ -18,6 +18,7 @@ class MainScreen(viewport: Viewport) : BaseScreen(viewport) {
     }
 
     override fun render(delta: Float) {
+        println(delta)
         layer.act(delta)
         layer.draw(delta)
     }

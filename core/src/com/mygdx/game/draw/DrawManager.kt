@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer
 import com.badlogic.gdx.utils.Disposable
 import com.mygdx.game.Util
 import com.mygdx.game.main.TiledMapParser
-import com.mygdx.game.main.unit.Enemy
 import com.mygdx.game.main.unit.GameUnit
 import java.util.*
 
@@ -37,10 +36,10 @@ class DrawManager(
     private val pathCell: TiledMapTileLayer.Cell = TiledMapTileLayer.Cell()
             .apply { tile = special.getTile(674) }
 
-    private val targetCell: TiledMapTileLayer.Cell = TiledMapTileLayer.Cell()
+    private val nextCell: TiledMapTileLayer.Cell = TiledMapTileLayer.Cell()
             .apply { tile = special.getTile(675) }
 
-    private val enemyCell: TiledMapTileLayer.Cell = TiledMapTileLayer.Cell()
+    private val targetCell: TiledMapTileLayer.Cell = TiledMapTileLayer.Cell()
             .apply { tile = special.getTile(676) }
 
 
@@ -58,11 +57,11 @@ class DrawManager(
         unitDrawers.apply {
             sort()
             forEach {
-                val type = if (it.unit is Enemy) enemyCell else friendCell
-                it.unit.currentCell.let { highLightLayer.setCell(it.x, it.y, type) }
                 it.unit.pathToTarget.forEach { highLightLayer.setCell(it.x, it.y, pathCell) }
-                it.unit.targetCell?.let { highLightLayer.setCell(it.x, it.y, targetCell) }
-//                it.draw()
+                it.unit.targetCell?.let { highLightLayer.setCell(it.x, it.y,targetCell ) }
+                it.unit.currentCell.let { highLightLayer.setCell(it.x, it.y, friendCell) }
+                it.unit.nextCell?.let { highLightLayer.setCell(it.x, it.y, nextCell) }
+                it.draw()
             }
         }
 

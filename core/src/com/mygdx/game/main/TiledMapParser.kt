@@ -2,19 +2,17 @@ package com.mygdx.game.main
 
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
-import com.badlogic.gdx.utils.Disposable
 import com.mygdx.game.MySandbox
 import com.mygdx.game.main.unit.Enemy
-import com.mygdx.game.main.unit.GameObject
 import com.mygdx.game.main.unit.GameUnit
 import org.xguzm.pathfinding.gdxbridge.NavigationTiledMapLayer
 import org.xguzm.pathfinding.grid.GridCell
 import java.lang.reflect.InvocationTargetException
 import java.util.*
 
-class TiledMapParser{
+class TiledMapParser {
 
-    val map = (MySandbox.assetManager.get("maps/test/1.tmx") as TiledMap)
+    val map = (MySandbox.assetManager.get(MySandbox.TEST_LEVEL) as TiledMap)
 
     private val navLayer = map.layers.get(LAYER_NAVIGATION) as NavigationTiledMapLayer
     private val dataLayer = map.layers.get(LAYER_DATA) as TiledMapTileLayer
@@ -37,7 +35,7 @@ class TiledMapParser{
                     try {
 
                         val type = cell.tile.properties.get(CELL_TILE_PROPERTY_TYPE).toString()
-                        val unitClass = Class.forName("${GameObject::class.java.`package`.name}.$type")
+                        val unitClass = Class.forName("${GameUnit::class.java.`package`.name}.$type")
 
                         val unitPosition = gridCells[x][y].apply { isWalkable = false }
                         val typesAndParams = if (unitClass.superclass == Enemy::class.java) {

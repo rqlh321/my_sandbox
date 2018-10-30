@@ -42,6 +42,8 @@ class MySandbox : ApplicationListener {
 
     companion object {
 
+        val TEST_LEVEL = "maps/test/1.tmx"
+
         fun game() {
             current.hide()
             current = screens[MainScreen::class.java.simpleName] ?: BaseScreen()
@@ -52,7 +54,7 @@ class MySandbox : ApplicationListener {
             setLoader(TiledMap::class.java, NavTmxMapLoader(InternalFileHandleResolver()))
         }
 
-        private val viewport = FitViewport(1024.toFloat(), 600.toFloat(), OrthographicCamera())
+        private val viewport = FitViewport(1024f, 600f, OrthographicCamera())
 
         private val screens = mapOf<String, Screen>(
                 LoadingScreen::class.java.simpleName to LoadingScreen(viewport)
